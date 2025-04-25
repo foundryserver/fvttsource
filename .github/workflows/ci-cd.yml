@@ -8,6 +8,7 @@ on:
 env:
   COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
   REGISTRY: registry.digitalocean.com/foundryvtt
+  ACTIONS_STEP_DEBUG: true
 
 jobs:
   DOWNLOAD_UNZIP_BUILD_PUSH:
@@ -21,7 +22,7 @@ jobs:
         run: |
           # Install dependencies for building FVTT images
           sudo apt-get update
-          sudo apt-get install -y wget unzip
+          sudo apt-get install -y -q wget unzip
 
       - name: Get Url from Commit Message
         run: |
@@ -32,12 +33,12 @@ jobs:
       - name: Download FVTT Image
         run: |
           # Download the FVTT image from the URL in the commit message
-          wget "$COMMIT_MESSAGE" -O fvtt.zip
+          wget -g "$COMMIT_MESSAGE" -O fvtt.zip
 
       - name: Unzip FVTT Image
         run: |
           # Unzip the FVTT image
-          unzip fvtt.zip -d fvtt
+          unzip -q fvtt.zip -d fvtt
 
       - name: Add License File
         run: |
