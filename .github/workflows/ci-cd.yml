@@ -16,7 +16,10 @@ jobs:
     steps:
       - name: Setup Debugging
         run: |
-          set -x
+          # set -x
+
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Get Url from Commit Message
         run: |
@@ -52,4 +55,4 @@ jobs:
           context: ./fvtt
           push: true
           tags: ${{ env.REGISTRY }}/fvtt:${{ env.VERSION }}
-          file: ../Dockerfile
+          file: Dockerfile
