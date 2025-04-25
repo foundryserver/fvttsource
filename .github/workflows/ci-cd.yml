@@ -8,7 +8,7 @@ on:
 env:
   COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
   REGISTRY: registry.digitalocean.com/foundryserver
-  ACTIONS_STEP_DEBUG: false
+  #ACTIONS_STEP_DEBUG: false
 
 jobs:
   DOWNLOAD_UNZIP_BUILD_PUSH:
@@ -22,7 +22,7 @@ jobs:
         run: |
           # Extract the version number from the commit message by spiting on / and taking the 5th part
           VERSION=$(echo "$COMMIT_MESSAGE" | cut -d'/' -f5)
-          echo "VERSION=$VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Download FVTT Image
         run: |
@@ -49,7 +49,7 @@ jobs:
       - name: Build FVTT Image
         uses: docker/build-push-action@v6
         with:
-          context: ./fvtt/
+          context: ./fvtt
           push: true
           tags: ${{ env.REGISTRY }}/fvtt:${{ env.VERSION }}
           file: ./Dockerfile
