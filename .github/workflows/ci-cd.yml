@@ -1,0 +1,56 @@
+# Work flow to build Foundry Images and save them to Digital Ocean Container Registry
+
+name: FVTT CI/CD
+
+on:
+  push:
+    branches: [main]
+env:
+  COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+  REGISTRY: registry.digitalocean.com/foundryvtt
+
+jobs:
+  DOWNLOAD_UNZIP_BUILD_PUSH:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Dependencies
+        run: |
+          # Install dependencies for building FVTT images
+          sudo apt-get update
+          sudo apt-get install -y wget unzip
+
+      - name: Get Url from Commit Message
+        run: |
+          # Extract the version number from the commit message by spiting on / and taking the 4th part
+          VERSION=$(echo "$COMMIT_MESSAGE" | cut -d'/' -f4)
+          echo "VERSION=$VERSION"
+
+      - name: Download FVTT Image
+        run: |
+          # Download the FVTT image from the URL in the commit message
+          wget "$COMMIT_MESSAGE" -O fvtt.zip
+
+      - name: Unzip FVTT Image
+        run: |
+          # Unzip the FVTT image
+          unzip fvtt.zip -d fvtt
+
+      - name: Add License File
+        run: |
+          # Add the license file to the FVTT image directory
+          cat ${{ secrets.FOUNDRY_LICENSE_JSON }} > fvtt/foundryserver.json
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DIGITALOCEAN_USERNAME }}
+          password: ${{ secrets.DIGITALOCEAN_PUSH_TOKEN }}
+
+      - name: Build FVTT Image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./fvtt
+          push: true
+          tags: ${{ env.REGISTRY }}/fvtt:${{ env.VERSION }}
+          file: ./Dockerfile
