@@ -41,9 +41,8 @@ jobs:
 
       - name: Add License File
         run: |
-          # Add the license file to the FVTT image directory
-          echo ${{ secrets.FOUNDRY_LICENSE_JSON }}
-          echo ${{ secrets.FOUNDRY_LICENSE_JSON }} > fvtt/foundryserver.json
+          # Write the secret FOUNDRY_LICENSE_json to a file in the fvtt directory
+          echo "${{ secrets.FOUNDRY_LICENSE_json }}" > /fvtt/foundrylicense.json
 
       - name: Log in to the Container registry
         uses: docker/login-action@v2
