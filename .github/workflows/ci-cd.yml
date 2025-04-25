@@ -18,12 +18,6 @@ jobs:
         run: |
           set -x
 
-      - name: Install Dependencies
-        run: |
-          # Install dependencies for building FVTT images
-          sudo apt-get update
-          sudo apt-get install -y -q wget unzip
-
       - name: Get Url from Commit Message
         run: |
           # Extract the version number from the commit message by spiting on / and taking the 4th part
@@ -33,7 +27,7 @@ jobs:
       - name: Download FVTT Image
         run: |
           # Download the FVTT image from the URL in the commit message
-          wget -g "$COMMIT_MESSAGE" -O fvtt.zip
+          wget -q "$COMMIT_MESSAGE" -O fvtt.zip
 
       - name: Unzip FVTT Image
         run: |
