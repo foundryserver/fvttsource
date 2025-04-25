@@ -52,4 +52,4 @@ jobs:
           context: ./fvtt
           push: true
           tags: ${{ env.REGISTRY }}/fvtt:${{ env.VERSION }}
-          file: ./Dockerfile
+          file: ../Dockerfile
