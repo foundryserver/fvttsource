@@ -20,8 +20,8 @@ jobs:
 
       - name: Get Url from Commit Message
         run: |
-          # Extract the version number from the commit message by spiting on / and taking the 4th part
-          VERSION=$(echo "$COMMIT_MESSAGE" | cut -d'/' -f4)
+          # Extract the version number from the commit message by spiting on / and taking the 5th part
+          VERSION=$(echo "$COMMIT_MESSAGE" | cut -d'/' -f5)
           echo "VERSION=$VERSION"
 
       - name: Download FVTT Image
@@ -32,12 +32,12 @@ jobs:
       - name: Unzip FVTT Image
         run: |
           # Unzip the FVTT image
-          unzip -q fvtt.zip -d fvtt
+          unzip -q fvtt.zip -d /fvtt
 
       - name: Add License File
         run: |
           # Write the secret FOUNDRY_LICENSE_json to a file in the fvtt directory
-          echo "${{ secrets.FOUNDRY_LICENSE_json }}" > /fvtt/foundrylicense.json
+          echo "${{ secrets.FOUNDRY_LICENSE_JSON }}" > /fvtt/foundrylicense.json
 
       - name: Log in to the Container registry
         uses: docker/login-action@v2
@@ -49,7 +49,7 @@ jobs:
       - name: Build FVTT Image
         uses: docker/build-push-action@v6
         with:
-          context: ./fvtt/
+          context: /fvtt/
           push: true
           tags: ${{ env.REGISTRY }}/fvtt:${{ env.VERSION }}
           file: ./Dockerfile
