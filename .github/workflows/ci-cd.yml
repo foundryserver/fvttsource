@@ -13,6 +13,10 @@ jobs:
   DOWNLOAD_UNZIP_BUILD_PUSH:
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Debugging
+        run: |
+          set -x
+
       - name: Install Dependencies
         run: |
           # Install dependencies for building FVTT images
@@ -38,6 +42,7 @@ jobs:
       - name: Add License File
         run: |
           # Add the license file to the FVTT image directory
+          echo ${{ secrets.FOUNDRY_LICENSE_JSON }}
           echo ${{ secrets.FOUNDRY_LICENSE_JSON }} > fvtt/foundryserver.json
 
       - name: Log in to the Container registry
@@ -50,7 +55,7 @@ jobs:
       - name: Build FVTT Image
         uses: docker/build-push-action@v6
         with:
-          context: ./fvtt
+          context: ./fvtt/
           push: true
           tags: ${{ env.REGISTRY }}/fvtt:${{ env.VERSION }}
           file: ./Dockerfile
