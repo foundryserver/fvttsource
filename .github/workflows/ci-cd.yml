@@ -7,8 +7,8 @@ on:
     branches: [main]
 env:
   COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
-  REGISTRY: registry.digitalocean.com/foundryvtt
-  ACTIONS_STEP_DEBUG: true
+  REGISTRY: registry.digitalocean.com/foundryserver
+  ACTIONS_STEP_DEBUG: false
 
 jobs:
   DOWNLOAD_UNZIP_BUILD_PUSH:
@@ -37,7 +37,7 @@ jobs:
       - name: Add License File
         run: |
           # Write the secret FOUNDRY_LICENSE_json to a file in the fvtt directory
-          echo "${{ secrets.FOUNDRY_LICENSE_JSON }}" > fvtt/foundrylicense.json
+          echo "${{ secrets.FOUNDRY_LICENSE_JSON }}" > fvtt/foundryserver.json
 
       - name: Log in to the Container registry
         uses: docker/login-action@v2
