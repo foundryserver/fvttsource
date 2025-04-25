@@ -8,15 +8,14 @@ on:
 env:
   COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
   REGISTRY: registry.digitalocean.com/foundryserver
-  #ACTIONS_STEP_DEBUG: false
 
 jobs:
   DOWNLOAD_UNZIP_BUILD_PUSH:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Debugging
-        run: |
-          # set -x
+      #  - name: Setup Debugging
+      #    run: |
+      #      # set -x
 
       - name: Checkout code
         uses: actions/checkout@v4
