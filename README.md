@@ -9,4 +9,4 @@ There is no need for stable/dev/beta eta.. we will only launch stable releases.
 Date: Version:
 oct 11,2022 10.286
 
-kick
+kicks
