@@ -10,5 +10,5 @@ Date: Version:
 oct 11,2022 10.286
 
 kicks
-sd
+sds
 fd
